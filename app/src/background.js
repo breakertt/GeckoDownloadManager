@@ -18,6 +18,10 @@ async function getDownloadLink({lessonID, lessonName}, echo360Domain, downloadHD
   const cleanString = videoDataString.substring(1, videoDataString.length - 1);
   const videoDataObject = JSON.parse(JSON.parse(cleanString));
 
+  console.log(videoDataObject)
+  let lessonDisplayName = videoDataObject['lesson']['name'].replace(/ /g, '_');
+  console.log(lessonDisplayName)
+
   const videosData =  videoDataObject.video.playableMedias.filter((videoData) => {
     const includesAudio = videoData.trackType.includes('Audio') 
     const includesVideo = videoData.trackType.includes('Video')
@@ -31,7 +35,7 @@ async function getDownloadLink({lessonID, lessonName}, echo360Domain, downloadHD
 
   const downloadArray = videosData.map((videoData) => {
     const quality = downloadHD ? `hd` : `sd`;
-    const videoName = `video_source_${videoData.sourceIndex}_${quality}.mp4`
+    const videoName = `${lessonDisplayName}_${videoData.sourceIndex}_${quality}.mp4`
 
     if (videoData.isHls)
     {

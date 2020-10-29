@@ -91,11 +91,11 @@ async function webRequestOnComplete(xhrRequest) {
     mediaLessons = xhrRequest;
 
     const getMediaLessonsJson = await getMediaData(mediaLessons);
+    
     const lessons = getLessons(getMediaLessonsJson);
     const courseSectionId = lessons[0].lesson.sectionId;
     courseName = await getCourseName(courseSectionId);
 
-    console.log(getMediaLessonsJson);
     downloadables = lessons.filter((dataItem) => {
       return canDownload(dataItem);
     });
@@ -110,9 +110,11 @@ async function webRequestOnComplete(xhrRequest) {
 
     const lectureSelect = document.getElementById("lectureSelect");
     downloadables.forEach((downloadable) => {
+      console.log(downloadable)
+
       const option = document.createElement("option");
       option.defaultSelected = true;
-      const name = courseName + "_" + getVideoFileName(downloadable);
+      const name = downloadable['lesson']['name'];
 
       option.innerHTML = name;
       lectureSelect.appendChild(option);
