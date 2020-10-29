@@ -19,8 +19,8 @@ async function getDownloadLink({lessonID, lessonName}, echo360Domain, downloadHD
   const videoDataObject = JSON.parse(JSON.parse(cleanString));
 
   console.log(videoDataObject)
-  let lessonDisplayName = videoDataObject['lesson']['name'].replace(/ /g, '_');
-  console.log(lessonDisplayName)
+  let lessonDisplayName = videoDataObject['lesson']['name'].replace(/ /g, '_').replace( /[<>:"\/\\|?*]+/g, '' );
+  console.log(lessonDisplayName);
 
   const videosData =  videoDataObject.video.playableMedias.filter((videoData) => {
     const includesAudio = videoData.trackType.includes('Audio') 
@@ -37,6 +37,8 @@ async function getDownloadLink({lessonID, lessonName}, echo360Domain, downloadHD
     const quality = downloadHD ? `hd` : `sd`;
     const videoName = `${lessonDisplayName}_${videoData.sourceIndex}_${quality}.mp4`
 
+    console.log(videoName)
+    
     if (videoData.isHls)
     {
       // here i am guessing what the url is since hls video are different format
